@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Coolmini",
+  "version": "1.0.7",
+  "description": "Coolmini — bulk input kolektif SIKEREN, lebih cool dari Sikeren. Kalender klik, flat minimalis.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://sikeren.jemberkab.go.id/*"],
+  "icons": {
+    "16": "assets/logo.svg",
+    "48": "assets/logo.svg",
+    "128": "assets/logo.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://sikeren.jemberkab.go.id/kinerja-harian/*"],
+      "js": ["src/content.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Coolmini",
+    "default_popup": "src/popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["https://sikeren.jemberkab.go.id/*"]
+    }
+  ]
+}

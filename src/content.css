@@ -1,0 +1,22 @@
+#sikeren-bulk-btn{margin-left:8px;border-radius:6px;font-weight:500;border:1px solid #2c7be5}
+#sikeren-bulk-modal .modal-content{border:1px solid #e3e8ef;border-radius:8px;overflow:hidden;background:#fff}
+#sikeren-bulk-modal .modal-header{border-bottom:1px solid #e3e8ef;background:#fff;padding:12px 16px}
+#sikeren-bulk-modal .modal-body{background:#fff}
+#sikeren-bulk-modal .modal-footer{background:#fff;border-top:1px solid #e3e8ef;padding:10px 16px}
+#sikeren-bulk-modal .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+#sikeren-bulk-modal .cal-header{font-weight:600;text-align:center;padding:4px 0;font-size:0.68rem;color:#6c757d;text-transform:uppercase;letter-spacing:0.3px;background:transparent}
+#sikeren-bulk-modal .cal-cell{aspect-ratio:1;border:1px solid #e3e8ef;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:0.82rem;background:#fff;position:relative;user-select:none}
+#sikeren-bulk-modal .cal-cell:hover{border-color:#2c7be5;background:#f8f9fb}
+#sikeren-bulk-modal .cal-cell.selected{background:#2c7be5;color:#fff;border-color:#2c7be5}
+#sikeren-bulk-modal .cal-cell.selected .cal-weekday{color:rgba(255,255,255,.9)}
+#sikeren-bulk-modal .cal-cell.weekend{background:#f8f9fb;color:#6c757d}
+#sikeren-bulk-modal .cal-cell.weekend.selected{background:#2c7be5;color:#fff}
+#sikeren-bulk-modal .cal-cell.has-existing{border-color:#2c7be5}
+#sikeren-bulk-modal .cal-cell.has-existing.selected{border-color:#2c7be5}
+#sikeren-bulk-modal .cal-cell .cal-day{font-size:0.9rem;font-weight:600;line-height:1}
+#sikeren-bulk-modal .cal-cell .cal-weekday{font-size:0.55rem;opacity:.7;margin-top:1px}
+#sikeren-bulk-modal #bulk-quick-hari,#sikeren-bulk-modal #bulk-quick-blok{border-radius:6px;border-color:#e3e8ef;background:#fff;font-weight:400;font-size:0.75rem}
+#sikeren-bulk-modal #bulk-chips .badge{border-radius:20px;font-weight:500}
+#sikeren-bulk-modal .form-select-sm,#sikeren-bulk-modal .form-control-sm{border-radius:6px;border-color:#e3e8ef;background:#fff}
+#sikeren-bulk-modal .form-select-sm:focus,#sikeren-bulk-modal .form-control-sm:focus{border-color:#2c7be5;box-shadow:none;outline:none}
+#sikeren-bulk-modal a[href="https://startupmini.com"]:hover{color:#2c7be5!important;text-decoration:underline!important}
