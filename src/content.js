@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const LOG = (...a) => console.log('[Coolmini]', ...a);
+  const LOG = (...a) => console.log('[Siganteng]', ...a);
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -45,6 +45,7 @@
     target.parentNode.appendChild(b);
   }
   let bulkModalEl=null; let selectedDates=new Set(); let allExistingDates=new Set();
+  let skpOptions=[]; let rutOptions=[];
 
   async function loadAllExistingDates() {
     const set = new Set();
@@ -75,26 +76,27 @@
     if(bulkModalEl){
       try{ const inst=bootstrap.Modal.getOrCreateInstance(bulkModalEl); inst.show(); }catch(e){ bulkModalEl.style.display='block'; bulkModalEl.classList.add('show'); }
       refreshCalendar();
-      try{ const lg=$('#bulk-logo'); if(lg && chrome?.runtime?.getURL){ lg.src=chrome.runtime.getURL('assets/logo.svg'); lg.style.display='inline-block'; }}catch(e){}
+      try{ const lg=$('#bulk-logo'); if(lg){ lg.src=(chrome?.runtime?.getURL?chrome.runtime.getURL('assets/logo.svg'):'assets/logo.svg'); lg.style.display='inline-block'; }}catch(e){}
+      revealStagger();
       return;
     }
     const html=`
-    <div class="modal" id="sikeren-bulk-modal" tabindex="-1" aria-hidden="true" style="display:none">
+    <div class="modal fade" id="sikeren-bulk-modal" tabindex="-1" aria-hidden="true" style="display:none">
       <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content position-relative" style="border:1px solid #e3e8ef">
-          <div class="modal-header py-2" style="background:#fff;border-bottom:1px solid #e3e8ef">
-            <h5 class="modal-title" style="font-size:0.95rem;font-weight:600;color:#232e3c"><img src="${chrome?.runtime?.getURL ? chrome.runtime.getURL('assets/logo.svg') : ''}" style="width:18px;height:18px;vertical-align:-3px;margin-right:8px;display:none" id="bulk-logo">Input Kolektif</h5>
+          <div class="modal-header py-2 bulk-anim" data-anim="0" style="background:#fff;border-bottom:1px solid #e3e8ef">
+            <h5 class="modal-title" style="font-size:0.95rem;font-weight:600;color:#232e3c"><img src="${chrome?.runtime?.getURL ? chrome.runtime.getURL('assets/logo.svg') : ''}" style="width:18px;height:18px;vertical-align:-3px;margin-right:8px;display:none" id="bulk-logo" onerror="this.style.display='none'">Input Kolektif</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" style="opacity:.6"></button>
           </div>
           <div class="progress" style="height:2px;margin:0;border-radius:0;display:none;background:#edf2f9" id="bulk-top-progress"><div class="progress-bar" id="bulk-top-bar" style="width:0%;background:#2c7be5"></div></div>
           <div class="modal-body p-3" style="background:#fff">
             <div class="row g-3">
               <div class="col-lg-6">
-                <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-2 bulk-anim" data-anim="1">
                   <h6 class="mb-0" id="bulk-month-label" style="font-size:0.85rem;font-weight:600;color:#344050"></h6>
                   <span class="badge" id="bulk-selected-count" style="background:#f0f6ff;color:#2c7be5;border:1px solid #d8e2ef;font-weight:500;font-size:0.7rem">0 terpilih</span>
                 </div>
-                <div class="d-flex gap-2 mb-2">
+                <div class="d-flex gap-2 mb-2 bulk-anim" data-anim="2">
                   <select class="form-select form-select-sm" id="bulk-quick-hari" style="flex:1;font-size:0.75rem;border-radius:6px;border-color:#e3e8ef;background:#fff">
                     <option value="">Hari ▾</option>
                     <option value="kerja5">Senin–Jumat (5h)</option>
@@ -116,18 +118,26 @@
                     <option value="clear">Bersihkan</option>
                   </select>
                 </div>
-                <div class="calendar-grid" id="bulk-calendar"></div>
+                <div class="calendar-grid bulk-anim" data-anim="3" id="bulk-calendar"></div>
               </div>
               <div class="col-lg-6">
-                <div style="border:1px solid #e3e8ef;border-radius:8px;background:#fff">
+                <div style="border:1px solid #e3e8ef;border-radius:8px;background:#fff" class="bulk-anim" data-anim="4">
                   <div class="p-3 pb-2">
                     <div class="mb-2">
                       <label class="form-label mb-1" style="font-size:0.72rem;font-weight:600;color:#344050">Jenis SKP</label>
-                      <select class="form-select form-select-sm" id="bulk-jenis-skp" style="font-size:0.8rem;border-radius:6px;border-color:#e3e8ef"></select>
+                      <div class="bulk-search-box">
+                        <input type="text" class="bulk-search-input" id="bulk-skp-search" placeholder="Ketik untuk cari..." autocomplete="off">
+                        <button type="button" class="bulk-search-clear" data-clear="skp" title="Hapus">&times;</button>
+                      </div>
+                      <input type="hidden" id="bulk-jenis-skp">
                     </div>
                     <div class="mb-2">
                       <label class="form-label mb-1" style="font-size:0.72rem;font-weight:600;color:#344050">Aktivitas Kinerja</label>
-                      <select class="form-select form-select-sm" id="bulk-rutinitas" style="font-size:0.8rem;border-radius:6px;border-color:#e3e8ef"></select>
+                      <div class="bulk-search-box">
+                        <input type="text" class="bulk-search-input" id="bulk-rutinitas-search" placeholder="Ketik untuk cari..." autocomplete="off">
+                        <button type="button" class="bulk-search-clear" data-clear="rut" title="Hapus">&times;</button>
+                      </div>
+                      <input type="hidden" id="bulk-rutinitas">
                     </div>
                     <div class="mb-2">
                       <label class="form-label mb-1" style="font-size:0.72rem;font-weight:600;color:#344050">Keterangan</label>
@@ -139,7 +149,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="mt-3">
+                <div class="mt-3 bulk-anim" data-anim="5">
                   <div class="d-flex justify-content-between align-items-center mb-1">
                     <small style="font-size:0.75rem;font-weight:600;color:#344050">Preview <span id="bulk-preview-count">0</span> tanggal</small>
                     <small class="text-muted" style="font-size:0.7rem" id="bulk-preview-hint">0 terpilih</small>
@@ -164,11 +174,11 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer py-2 d-flex justify-content-between align-items-center" style="background:#fff;border-top:1px solid #e3e8ef">
+          <div class="modal-footer py-2 d-flex justify-content-between align-items-center bulk-anim" data-anim="6" style="background:#fff;border-top:1px solid #e3e8ef">
             <a href="https://startupmini.com" target="_blank" style="font-size:10px;color:#9da9bb;text-decoration:none">startupmini.com</a>
             <div class="d-flex gap-2">
               <button class="btn btn-sm" id="bulk-cancel" style="background:#fff;border:1px solid #e3e8ef;color:#344050">Batal</button>
-              <button class="btn btn-sm" id="bulk-submit" style="background:#2c7be5;color:#fff;border:1px solid #2c7be5">Simpan Kolektif (<span id="bulk-submit-count">0</span>)</button>
+              <button class="btn btn-sm" id="bulk-submit" style="background:#2c7be5;color:#fff;border:1px solid #2c7be5">Simpan (<span id="bulk-submit-count">0</span>)</button>
             </div>
           </div>
         </div>
@@ -186,6 +196,8 @@
     if(label) label.after(loader);
     loader.style.display = 'inline';
     try{ bootstrap.Modal.getOrCreateInstance(bulkModalEl).show(); }catch(e){ bulkModalEl.style.display='block'; bulkModalEl.classList.add('show'); }
+    // entrance animation
+    revealStagger();
     // load existing dates from all pages
     (async () => {
       allExistingDates = await loadAllExistingDates();
@@ -202,9 +214,101 @@
   }
 
   function populateSelects(){
-    const skp=$('#bulk-jenis-skp'), rut=$('#bulk-rutinitas'); if(!skp||!rut) return;
-    const skps=getSkpOptions(); skp.innerHTML='<option value="">-- Pilih Jenis SKP --</option>'+skps.map(o=>`<option value="${o.value.replace(/"/g,'&quot;')}">${o.text}</option>`).join('');
-    const ruts=getRutinitasOptions(); rut.innerHTML='<option value="">-- Pilih Aktivitas --</option>'+ruts.map(o=>`<option value="${o.value}">${o.text}</option>`).join('');
+    skpOptions=getSkpOptions(); rutOptions=getRutinitasOptions();
+    // store into hidden inputs so submitBulk can read values
+    const skpHidden=$('#bulk-jenis-skp'), rutHidden=$('#bulk-rutinitas');
+    if(skpHidden) skpHidden.dataset.options=JSON.stringify(skpOptions);
+    if(rutHidden) rutHidden.dataset.options=JSON.stringify(rutOptions);
+    bindSearch('skp', skpOptions);
+    bindSearch('rut', rutOptions);
+  }
+
+  let floatingPanel=null; let activeKey=null;
+
+  function getPanel(){
+    if(!floatingPanel){
+      floatingPanel=document.createElement('div');
+      floatingPanel.id='bulk-float-dropdown';
+      floatingPanel.className='bulk-float-dropdown';
+      floatingPanel.style.display='none';
+      document.body.appendChild(floatingPanel);
+    }
+    return floatingPanel;
+  }
+
+  function bindSearch(key, opts){
+    const input=key==='skp'?$('#bulk-skp-search'):$('#bulk-rutinitas-search');
+    const hidden=key==='skp'?$('#bulk-jenis-skp'):$('#bulk-rutinitas');
+    if(!input||!hidden) return;
+    input._opts=opts;
+    let box=input.closest('.bulk-search-box');
+    input.addEventListener('focus', ()=>{ openDropdown(key, input, hidden, ''); });
+    input.addEventListener('input', ()=>{ openDropdown(key, input, hidden, input.value); });
+    input.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeDropdown(); } });
+    // clear button
+    const clearBtn=key==='skp'?$('[data-clear="skp"]'):$('[data-clear="rut"]');
+    if(clearBtn) clearBtn.addEventListener('click', (e)=>{ e.stopPropagation(); input.value=''; delete input.dataset.value; hidden.value=''; input.classList.remove('has-value'); const ev=new Event('change',{bubbles:true}); hidden.dispatchEvent(ev); });
+  }
+
+  function openDropdown(key, input, hidden, q){
+    closeDropdown();
+    activeKey=key;
+    const panel=getPanel();
+    const opts=input._opts||[];
+    const query=(q||'').toLowerCase().trim();
+    const filtered=query? opts.filter(o=>o.text.toLowerCase().includes(query)) : opts;
+    panel.innerHTML='';
+    if(filtered.length===0){
+      panel.innerHTML='<div class="bulk-dropdown-empty">Tidak ditemukan</div>';
+    } else {
+      filtered.forEach(o=>{
+        const item=document.createElement('div');
+        item.className='bulk-dropdown-item';
+        item.textContent=o.text;
+        item.dataset.value=o.value;
+        item.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          hidden.value=o.value;
+          input.value=o.text;
+          input.dataset.value=o.value;
+          input.classList.add('has-value');
+          closeDropdown();
+          const ev=new Event('change',{bubbles:true});
+          hidden.dispatchEvent(ev);
+        });
+        panel.appendChild(item);
+      });
+    }
+    // position below the input
+    const r=input.getBoundingClientRect();
+    panel.style.display='block';
+    panel.style.left=r.left+'px';
+    panel.style.width=r.width+'px';
+    // measure height, flip above if not enough space below
+    const estH=Math.min(220, panel.scrollHeight+4);
+    const spaceBelow=window.innerHeight - r.bottom;
+    if(spaceBelow < estH && r.top > estH){
+      panel.style.top=(r.top - estH - 4)+'px';
+    } else {
+      panel.style.top=(r.bottom + 4)+'px';
+    }
+    // close on scroll of modal body / window
+    const body=bulkModalEl?bulkModalEl.querySelector('.modal-body'):null;
+    if(body && !body._scrollHandler){ body._scrollHandler=()=>closeDropdown(); body.addEventListener('scroll', body._scrollHandler); }
+  }
+
+  function closeDropdown(){
+    if(floatingPanel) floatingPanel.style.display='none';
+    if(activeKey){
+      const input=activeKey==='skp'?$('#bulk-skp-search'):$('#bulk-rutinitas-search');
+      if(input) input.closest('.bulk-search-box').classList.remove('open');
+    }
+    activeKey=null;
+  }
+
+  function getSelectedValue(key){
+    const hidden=key==='skp'?$('#bulk-jenis-skp'):$('#bulk-rutinitas');
+    return hidden ? hidden.value : '';
   }
 
   function refreshCalendar(){
@@ -278,6 +382,9 @@
     const chips=$('#bulk-chips'); const hint=$('#bulk-preview-hint');
     if(hint) hint.textContent=`${cnt} akan dikirim`;
     const previewCnt=$('#bulk-preview-count'); if(previewCnt) previewCnt.textContent=cnt;
+    // disable submit button if no dates selected
+    const btn=$('#bulk-submit');
+    if(btn) btn.disabled = (cnt === 0);
     if(chips){
       if(cnt===0) chips.innerHTML='<span style="font-size:0.75rem;color:#6c757d">Belum ada tanggal terpilih</span>';
       else {
@@ -299,6 +406,18 @@
     document.querySelectorAll('.modal-backdrop').forEach(el=>el.remove());
     document.body.classList.remove('modal-open'); document.body.style.overflow='';
     document.body.style.paddingRight='';
+    // reset animation state so next open replays
+    bulkModalEl && bulkModalEl.querySelectorAll('.bulk-anim').forEach(el=>el.classList.remove('in'));
+  }
+
+  function revealStagger(){
+    const els=bulkModalEl ? bulkModalEl.querySelectorAll('.bulk-anim') : [];
+    if(!els.length) return;
+    els.forEach(el=>el.classList.remove('in'));
+    els.forEach((el)=>{
+      const delay=parseInt(el.dataset.anim||'0',10)*55;
+      setTimeout(()=>{ el.classList.add('in'); }, delay);
+    });
   }
 
   function showConfirm(dates){
@@ -317,7 +436,7 @@
   }
 
   async function submitBulk(){
-    const jenis=$('#bulk-jenis-skp').value, rut=$('#bulk-rutinitas').value, ket=$('#bulk-keterangan').value.trim(), kali=$('#bulk-pengkali').value, out=$('#bulk-output').value.trim();
+    const jenis=getSelectedValue('skp'), rut=getSelectedValue('rut'), ket=$('#bulk-keterangan').value.trim(), kali=$('#bulk-pengkali').value, out=$('#bulk-output').value.trim();
     if(!jenis) return alert('Pilih Jenis SKP'); if(!rut) return alert('Pilih Aktivitas'); if(!ket) return alert('Isi Keterangan'); if(!out) return alert('Isi Output');
     const dates=Array.from(selectedDates).sort();
     if(dates.length===0) return alert('Tidak ada tanggal terpilih');
@@ -337,7 +456,23 @@
       const cur=i+1, p=Math.round(cur/dates.length*100); bar.style.width=p+'%'; topBar.style.width=p+'%'; txt.textContent=`${cur}/${dates.length}`; pct.textContent=p+'%'; logEl.scrollTop=logEl.scrollHeight; await sleep(600);
     }
     btn.disabled=false; logEl.innerHTML+=`<hr style="margin:8px 0;border:none;border-top:1px solid #e3e8ef"><div><b>Selesai:</b> ${ok} berhasil, ${fail} gagal dari ${dates.length}</div>`;
-    if(fail===0) setTimeout(()=>location.reload(),1500);
+    if(fail===0){
+      // reset template fields, keep dates, update existing, disable button
+      const skpSearch=$('#bulk-skp-search'), rutSearch=$('#bulk-rutinitas-search');
+      if(skpSearch){ skpSearch.value=''; delete skpSearch.dataset.value; }
+      if(rutSearch){ rutSearch.value=''; delete rutSearch.dataset.value; }
+      $('#bulk-jenis-skp').value='';
+      $('#bulk-rutinitas').value='';
+      $('#bulk-keterangan').value='';
+      $('#bulk-output').value='';
+      $('#bulk-pengkali').value='1';
+      dates.forEach(d=>allExistingDates.add(d));
+      refreshCalendar();
+      updateCounts();
+      btn.disabled=true;
+    } else {
+      btn.disabled=false;
+    }
   }
 
   function init(){
@@ -345,6 +480,10 @@
     injectButton();
     const obs=new MutationObserver(()=>{ injectButton(); });
     obs.observe(document.body,{childList:true,subtree:true});
+    // close floating dropdown when clicking outside any search box
+    document.addEventListener('click', (e)=>{
+      if(!e.target.closest('#bulk-float-dropdown') && !e.target.closest('.bulk-search-box')) closeDropdown();
+    });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();

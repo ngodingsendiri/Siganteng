@@ -1,5 +1,5 @@
 #sikeren-bulk-btn{margin-left:8px;border-radius:6px;font-weight:500;border:1px solid #2c7be5}
-#sikeren-bulk-modal .modal-content{border:1px solid #e3e8ef;border-radius:8px;overflow:hidden;background:#fff}
+#sikeren-bulk-modal .modal-content{border:1px solid #e3e8ef;border-radius:6px;overflow:hidden;background:#fff;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
 #sikeren-bulk-modal .modal-header{border-bottom:1px solid #e3e8ef;background:#fff;padding:12px 16px}
 #sikeren-bulk-modal .modal-body{background:#fff}
 #sikeren-bulk-modal .modal-footer{background:#fff;border-top:1px solid #e3e8ef;padding:10px 16px}
@@ -20,3 +20,28 @@
 #sikeren-bulk-modal .form-select-sm,#sikeren-bulk-modal .form-control-sm{border-radius:6px;border-color:#e3e8ef;background:#fff}
 #sikeren-bulk-modal .form-select-sm:focus,#sikeren-bulk-modal .form-control-sm:focus{border-color:#2c7be5;box-shadow:none;outline:none}
 #sikeren-bulk-modal a[href="https://startupmini.com"]:hover{color:#2c7be5!important;text-decoration:underline!important}
+/* Hybrid searchable dropdown — flat Siganteng theme */
+#sikeren-bulk-modal .bulk-search-box{position:relative}
+#sikeren-bulk-modal .bulk-search-input{width:100%;padding:6px 26px 6px 10px;font-size:0.8rem;color:#344050;border:1px solid #e3e8ef;border-radius:6px;background:#fff;outline:none;transition:border-color .15s}
+#sikeren-bulk-modal .bulk-search-input:focus{border-color:#2c7be5}
+#sikeren-bulk-modal .bulk-search-input.has-value{font-weight:500}
+#sikeren-bulk-modal .bulk-search-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#9da9bb;font-size:1rem;line-height:1;cursor:pointer;padding:2px 4px}
+#sikeren-bulk-modal .bulk-search-clear:hover{color:#2c7be5}
+#bulk-float-dropdown{position:fixed;z-index:1070;max-height:220px;overflow-y:auto;border:1px solid #e3e8ef;border-radius:6px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+#bulk-float-dropdown .bulk-dropdown-item{padding:8px 12px;font-size:0.78rem;color:#344050;cursor:pointer;white-space:normal;line-height:1.35}
+#bulk-float-dropdown .bulk-dropdown-item:hover,#bulk-float-dropdown .bulk-dropdown-item.is-active{background:#f0f6ff;color:#2c7be5}
+#bulk-float-dropdown .bulk-dropdown-empty{padding:12px;font-size:0.78rem;color:#9da9bb;text-align:center}
+/* Entrance motion — modal fade-in + staggered reveal (GPU-only: opacity/transform) */
+#sikeren-bulk-modal.fade{transition:opacity .18s ease}
+#sikeren-bulk-modal.fade .modal-dialog{transition:transform .18s ease, opacity .18s ease}
+#sikeren-bulk-modal.fade:not(.show){opacity:0}
+#sikeren-bulk-modal.fade:not(.show) .modal-dialog{opacity:0;transform:translateY(14px) scale(.985)}
+#sikeren-bulk-modal.fade.show .modal-dialog{opacity:1;transform:none}
+#sikeren-bulk-modal .bulk-anim{opacity:0;transform:translateY(8px)}
+#sikeren-bulk-modal .bulk-anim.in{opacity:1;transform:none;transition:opacity .3s ease,transform .3s ease}
+#sikeren-bulk-modal .bulk-anim[data-anim="3"]{transform:translateY(12px)}
+#sikeren-bulk-modal .bulk-anim[data-anim="4"]{transform:translateX(-6px)}
+@media (prefers-reduced-motion: reduce){
+  #sikeren-bulk-modal .bulk-anim,#sikeren-bulk-modal.fade{transition:none}
+  #sikeren-bulk-modal .bulk-anim{opacity:1;transform:none}
+}

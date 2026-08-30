@@ -1,0 +1,23 @@
+{
+  "name": "siganteng",
+  "version": "1.0.0",
+  "description": "Input kinerja harian SIKEREN Jember secara kolektif (banyak tanggal sekaligus) tanpa ubah server. Membaca **Jenis SKP** & **Aktivitas** live per role, kalender klik fleksibel, default **Senin–Jumat**, kosongan.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngodingsendiri/coolmini.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ngodingsendiri/coolmini/issues"
+  },
+  "homepage": "https://github.com/ngodingsendiri/coolmini#readme",
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2"
+  }
+}

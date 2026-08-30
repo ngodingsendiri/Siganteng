@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Coolmini",
-  "version": "1.0.7",
-  "description": "Coolmini — bulk input kolektif SIKEREN, lebih cool dari Sikeren. Kalender klik, flat minimalis.",
+  "name": "Siganteng",
+  "version": "1.0.13",
+  "description": "Siganteng — bulk input kolektif SIKEREN, lebih ganteng dari Sikeren. Kalender klik, flat minimalis.",
   "permissions": ["storage"],
   "host_permissions": ["https://sikeren.jemberkab.go.id/*"],
   "icons": {
-    "16": "assets/logo.svg",
-    "48": "assets/logo.svg",
-    "128": "assets/logo.svg"
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
   },
   "content_scripts": [
     {
@@ -19,7 +19,7 @@
     }
   ],
   "action": {
-    "default_title": "Coolmini",
+    "default_title": "Siganteng",
     "default_popup": "src/popup.html"
   },
   "web_accessible_resources": [
